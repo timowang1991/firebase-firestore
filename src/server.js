@@ -1,4 +1,4 @@
-const { collection, doc, getDoc, getDocs, setDoc, query, where } = require('firebase/firestore');
+const { collection, doc, getDoc, getDocs, setDoc, updateDoc, query, where } = require('firebase/firestore');
 const { firestore } = require('./firebase');
 
 const usersCollectionRef = collection(firestore, 'dev/users/users');
@@ -32,6 +32,11 @@ async function addDocFunc() {
     }
 }
 
+async function updateDocFunc() {
+    const userDocRef = doc(firestore, 'dev/users/loginPending', 'someone@gmail.com');
+    await updateDoc(userDocRef, { sendEmailAttempts: 3 });
+}
+
 async function queryDocFunc() {
     const userDocRef = doc(usersCollectionRef, 'someone@gmail.com');
     const userDoc = await getDoc(userDocRef);
@@ -47,7 +52,10 @@ async function queryDocFunc() {
 }
 
 addDocFunc()
-    .then(() => console.log('Done'));
+    .then(() => console.log('Add Done'));
 
 queryDocFunc()
-    .then(() => console.log('Done'));
+    .then(() => console.log('Query Done'));
+
+updateDocFunc()
+    .then(() => console.log('Update Done'));
