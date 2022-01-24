@@ -1,9 +1,11 @@
 const { collection, doc, getDoc, getDocs, setDoc, query, where } = require('firebase/firestore');
 const { firestore } = require('./firebase');
 
+const usersCollectionRef = collection(firestore, 'dev/users/users');
+
 async function addDocFunc() {
     try {
-        const newUserDocRef = doc(firestore, 'dev/users/users', 'someone@gmail.com');
+        const newUserDocRef = doc(usersCollectionRef, 'someone@gmail.com');
         await setDoc(newUserDocRef, {
             walletAddress: '0x01',
             gamebagAddress: '0x03'
@@ -31,14 +33,13 @@ async function addDocFunc() {
 }
 
 async function queryDocFunc() {
-    const userDocRef = doc(firestore, 'dev/users/users', 'someone@gmail.com');
+    const userDocRef = doc(usersCollectionRef, 'someone@gmail.com');
     const userDoc = await getDoc(userDocRef);
     if (userDoc.exists()) {
         console.log('user doc data', userDoc.data());
     }
 
-    const userCollectionRef = collection(firestore, 'dev/users/users');
-    const q = query(userCollectionRef, where('walletAddress', '==', '0x01'));
+    const q = query(usersCollectionRef, where('walletAddress', '==', '0x01'));
     const userDocs = await getDocs(q);
     userDocs.forEach((userDoc) => {
         console.log(userDoc.id, '=>', userDoc.data());
