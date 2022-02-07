@@ -1,4 +1,4 @@
-const { collection, doc, getDoc, getDocs, setDoc, updateDoc, query, where } = require('firebase/firestore');
+const { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where } = require('firebase/firestore');
 const { firestore } = require('./firebase');
 
 const usersCollectionRef = collection(firestore, 'dev/users/users');
@@ -51,6 +51,15 @@ async function queryDocFunc() {
     })
 }
 
+async function deleteDocFunc() {
+    const userDocRef = doc(usersCollectionRef, 'someone@gmail.com');
+    const userDoc = await getDoc(userDocRef);
+    if (userDoc.exists()) {
+        await deleteDoc(userDocRef);
+        console.log('userDoc deleted');
+    }
+}
+
 addDocFunc()
     .then(() => console.log('Add Done'));
 
@@ -59,3 +68,6 @@ queryDocFunc()
 
 updateDocFunc()
     .then(() => console.log('Update Done'));
+
+deleteDocFunc()
+    .then(() => console.log('Delete Done'));
